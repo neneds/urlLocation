@@ -15,17 +15,11 @@
 
         //Google
         if (urlString.includes("goo.gl")) {
-            return
+            return parseShortGoogleMapsCoordinates(urlString);
         }
 
         if (urlString.includes("google.com")) {
-            //var unshortedURL = urlService.requestUnshortURL(urlString);
-            let parsedURL = htmlParser.parseGoogleMapsDOM(urlString);
-            parsedURL.then(function(result) {
-                console.log(result)
-            }, function(err) {
-                console.log(err);
-            })
+            return parseGoogleMapsURL(urlString);
         }
 
         //Here maps
@@ -59,6 +53,43 @@
             return JSON.stringify(noResultError)
         }
         return coordinatesToJSONObject(latitude, longitude);
+    }
+
+
+    function parseShortGoogleMapsCoordinates(urlString) {
+        return new Promise((resolve, reject) => {
+            var unshortedURL = urlService.requestUnshortURL(urlString);
+            unshortedURL.then(function(resultURL) {
+                if (typeof result === 'undefined') {
+                    var noResultError = new Error("Could not get the unshorted URL");
+                    reject(noResultError);
+                }
+                let parsedResult = parseGoogleMapsURL(resultURL);
+                parsedResult.then(function(jsonCoordinates) {
+                    result(jsonCoordinates);
+                }, function(err) {
+                    reject(JSON.stringify(err))
+                })
+            }, function(err) {
+                reject(JSON.stringify(err))
+            })
+        });
+    }
+
+    function parseGoogleMapsURL(urlString) {
+        return new Promise((resolve, reject) => {
+            let parsedURL = htmlParser.parseGoogleMapsHTML(urlString);
+            parsedURL.then(function(resultCoordinates) {
+                let resultJSON = coordinatesToJSONObject(resultCoordinates.latitude, resultCoordinates.longitude);
+                resultJSON.then(function(jsonCoordinates) {
+                    resolve(jsonCoordinates);
+                }, function(err) {
+                    reject(JSON.stringify(err))
+                })
+            }, function(err) {
+                reject(JSON.stringify(err))
+            })
+        });
     }
 
     function coordinatesToJSONObject(latitude, longitude) {

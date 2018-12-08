@@ -13,4 +13,8 @@ exports.coordinatesFromURL = function(originalURL) {
 }
 
 let result = parser.parseURLString(testGoogle);
-//console.log(result);
+result.then(function(jsonCoordinates) {
+    console.log(jsonCoordinates);
+}, function(err) {
+    console.log(err);
+})

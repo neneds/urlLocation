@@ -4,7 +4,7 @@ const googleCoordinatesRegex = "(-?\\d+\\.\\d+),(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"
 
 var exports = module.exports = {};
 
-exports.parseGoogleMapsDOM = function fetchGoogleMapsCoordinates(unshortedURL) {
+exports.parseGoogleMapsHTML = function fetchGoogleMapsCoordinates(unshortedURL) {
     return new Promise((resolve, reject) => {
         let htmlRequest = urlService.requestHTMLBody(unshortedURL);
         htmlRequest.then(function(result) {
