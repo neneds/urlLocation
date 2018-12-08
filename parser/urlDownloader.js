@@ -21,3 +21,15 @@ exports.requestUnshortURL = function(shortURL) {
         });
     });
 }
+
+exports.requestHTMLBody = function(url) {
+    return new Promise((resolve, reject) => {
+        request(url, (err, res, body) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(body);
+        });
+    });
+}

@@ -12,5 +12,5 @@ exports.coordinatesFromURL = function(originalURL) {
     return parser.parseURLString(originalURL);
 }
 
-let result = parser.parseURLString(testApple);
-console.log(result);
+let result = parser.parseURLString(testGoogle);
+//console.log(result);

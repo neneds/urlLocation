@@ -1,4 +1,5 @@
-    const unshortURLService = require("./urlUnshortFetch.js")
+    const urlService = require("./urlDownloader.js");
+    const htmlParser = require("./htmlParser.js");
 
     const appleMapsRegex = "=(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"
     const googleMapsRegex = "(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"
@@ -18,7 +19,13 @@
         }
 
         if (urlString.includes("google.com")) {
-            return unshortURLService.requestUnshortURL(urlString);
+            //var unshortedURL = urlService.requestUnshortURL(urlString);
+            let parsedURL = htmlParser.parseGoogleMapsDOM(urlString);
+            parsedURL.then(function(result) {
+                console.log(result)
+            }, function(err) {
+                console.log(err);
+            })
         }
 
         //Here maps
@@ -27,25 +34,31 @@
         }
 
         if (urlString.includes("her.is")) {
+            var unshortedURL = urlService.requestUnshortURL(urlString);
 
         }
     }
 
     function parseAppleMapsCoordinates(urlString) {
         var regexResult = urlString.match(appleMapsRegex);
-        //console.log(regexResult);
         let latitude = regexResult[1];
         let longitude = regexResult[2];
+        if ((typeof latitude === 'undefined') || (typeof longitude === 'undefined')) {
+            var noResultError = new Error("Could not get the coordinates values from URL");
+            return JSON.stringify(noResultError)
+        }
         return coordinatesToJSONObject(latitude, longitude);
     }
 
     function parseHereMapsCoordinates(urlString) {
         var regexResult = urlString.match(hereMapsRegex);
-        //console.log(regexResult);
         let latitude = regexResult[1];
         let longitude = regexResult[2];
-        console.log(latitude);
-        console.log(longitude);
+        if ((typeof latitude === 'undefined') || (typeof longitude === 'undefined')) {
+            var noResultError = new Error("Could not get the coordinates values from URL");
+            return JSON.stringify(noResultError)
+        }
+        return coordinatesToJSONObject(latitude, longitude);
     }
 
     function coordinatesToJSONObject(latitude, longitude) {
