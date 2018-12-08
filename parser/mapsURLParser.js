@@ -2,7 +2,6 @@
     const htmlParser = require("./htmlParser.js");
 
     const appleMapsRegex = "=(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"
-    const googleMapsRegex = "(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)"
     const hereMapsRegex = "=(-?\\d+\\.\\d+)%2C(-?\\d+\\.\\d+)"
 
     var exports = module.exports = {};
@@ -28,8 +27,7 @@
         }
 
         if (urlString.includes("her.is")) {
-            var unshortedURL = urlService.requestUnshortURL(urlString);
-
+            return parseHereMapsShortURL(urlString);
         }
     }
 
@@ -44,29 +42,13 @@
         return coordinatesToJSONObject(latitude, longitude);
     }
 
-    function parseHereMapsCoordinates(urlString) {
-        var regexResult = urlString.match(hereMapsRegex);
-        let latitude = regexResult[1];
-        let longitude = regexResult[2];
-        if ((typeof latitude === 'undefined') || (typeof longitude === 'undefined')) {
-            var noResultError = new Error("Could not get the coordinates values from URL");
-            return JSON.stringify(noResultError)
-        }
-        return coordinatesToJSONObject(latitude, longitude);
-    }
-
-
     function parseShortGoogleMapsCoordinates(urlString) {
         return new Promise((resolve, reject) => {
             var unshortedURL = urlService.requestUnshortURL(urlString);
             unshortedURL.then(function(resultURL) {
-                if (typeof result === 'undefined') {
-                    var noResultError = new Error("Could not get the unshorted URL");
-                    reject(noResultError);
-                }
                 let parsedResult = parseGoogleMapsURL(resultURL);
                 parsedResult.then(function(jsonCoordinates) {
-                    result(jsonCoordinates);
+                    resolve(jsonCoordinates);
                 }, function(err) {
                     reject(JSON.stringify(err))
                 })
@@ -90,6 +72,33 @@
                 reject(JSON.stringify(err))
             })
         });
+    }
+
+    function parseHereMapsShortURL(urlString) {
+        return new Promise((resolve, reject) => {
+            var unshortedURL = urlService.requestUnshortURL(urlString);
+            unshortedURL.then(function(resultURL) {
+                let parsedResult = parseHereMapsCoordinates(resultURL);
+                parsedResult.then(function(jsonCoordinates) {
+                    resolve(jsonCoordinates);
+                }, function(err) {
+                    reject(JSON.stringify(err))
+                })
+            }, function(err) {
+                reject(JSON.stringify(err))
+            })
+        });
+    }
+
+    function parseHereMapsCoordinates(urlString) {
+        var regexResult = urlString.match(hereMapsRegex);
+        let latitude = regexResult[1];
+        let longitude = regexResult[2];
+        if ((typeof latitude === 'undefined') || (typeof longitude === 'undefined')) {
+            var noResultError = new Error("Could not get the coordinates values from URL");
+            return JSON.stringify(noResultError)
+        }
+        return coordinatesToJSONObject(latitude, longitude);
     }
 
     function coordinatesToJSONObject(latitude, longitude) {
