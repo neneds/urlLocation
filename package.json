@@ -1,0 +1,13 @@
+{
+    "name": "@neneds/urllocation",
+    "version": "0.1.0",
+    "description": "Retrieve location coordinates from url of location apps",
+    "license": "MIT",
+    "repository": "neneds/urlLocation",
+    "main": "index.js",
+    "keywords": [
+        "location",
+        "url",
+        "scraping"
+    ]
+}
