@@ -6,6 +6,7 @@ var exports = module.exports = {};
 exports.requestUnshortURL = function(shortURL) {
     return new Promise((resolve, reject) => {
         let requestURL = unshortnerProvider + shortURL;
+        console.log(requestURL);
         request(requestURL, { json: true }, (err, res, body) => {
             if (err) {
                 reject(err);
