@@ -14,7 +14,7 @@ exports.coordinatesFromURL = function(originalURL) {
     return parser.parseURLString(originalURL);
 }
 
-let result = parser.parseURLString(hereMapsShort);
+let result = parser.parseURLString(testGoogleShort);
 result.then(function(jsonCoordinates) {
     console.log(jsonCoordinates);
 }, function(err) {
