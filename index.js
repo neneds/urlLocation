@@ -6,7 +6,7 @@ let testHere = "https://wego.here.com/p/s-Yz1mb29kLWRyaW5rO2lkPTA3Nmp4N3BzLTFkZW
 
 let testGoogle = "https://www.google.com/maps?q=Lote+13/14,+St.+A+Norte+CNA+1+Varej%C3%A3o+DI+-+Taguatinga,+Bras%C3%ADlia+-+DF,+72110-015&ftid=0x935a32e6e1d605b9:0x24748e1fc1112047&hl=pt-BR&gl=br&shorturl=1";
 
-let testGoogleShort = "https://goo.gl/maps/o8HMW9Gk25p";
+let testGoogleShort = 'https://goo.gl/maps/o8HMW9Gk25p';
 let hereMapsShort = "https://her.is/2RIjNDN";
 var exports = module.exports = {};
 

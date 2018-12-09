@@ -1,12 +1,11 @@
 const request = require('request');
-const unshortnerProvider = "https://unshorten.me/json/";
+const unshortnerProvider = 'https://unshorten.me/json/';
 
 var exports = module.exports = {};
 
 exports.requestUnshortURL = function(shortURL) {
     return new Promise((resolve, reject) => {
         let requestURL = unshortnerProvider + shortURL;
-        console.log(requestURL);
         request(requestURL, { json: true }, (err, res, body) => {
             if (err) {
                 reject(err);
